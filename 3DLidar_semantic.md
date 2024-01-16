@@ -8,6 +8,14 @@
 
 主干网络，提取特征的网络
 
+**head：**
+
+head是获取网络输出内容的网络，利用之前提取的特征，head利用这些特征，做出预测。
+
+**neck:**
+
+是放在backbone和head之间的，是为了更好的利用backbone提取的特征。
+
 ### 点云标注数据集 SemanticKITTI
 
 标注 28 类语义，共 22 个 sequences，43000 scans
