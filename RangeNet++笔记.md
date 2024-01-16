@@ -17,6 +17,16 @@ r是点的二范数，即
 $$
 r=\sqrt{x^2+y^2+z^2}
 $$
+$$
+\left(\begin{array}{l}
+u \\
+v
+\end{array}\right)=\left(\begin{array}{c}
+\frac{1}{2}\left[1-\arctan (y, x) \pi^{-1}\right] w \\
+{\left[1-\left(\arcsin \left(z r^{-1}\right)+\mathrm{f}_{\mathrm{up}}\right) \mathrm{f}^{-1}\right] h}
+\end{array}\right)
+$$
+
 e代表反射强度
 
 x y z r e生成一个张量（tensor）
@@ -108,10 +118,37 @@ Velodyne HDL 64-E激光雷达具有64个激光器,将投影图像的宽度设置
 
 ### Fully Convolutional Semantic Segmentation
 
+网络在进行downsample和upsample时，只在宽度上进行操作
 
+垂直方向只能采集64个值
 
-
+加权损失函数
 
 ## 投影回去3D
 
 ### Point Cloud Reconstruction from Range Image
+
+
+
+## 后处理
+
+基于GPU的KNN搜索
+
+
+
+```yaml
+    用于推理，计算整个数据集的平均值和标准差
+    img_means: #range,x,y,z,signal
+      - 12.12
+      - 10.88
+      - 0.23
+      - -1.04
+      - 0.21
+    img_stds: #range,x,y,z,signal
+      - 12.32
+      - 11.47
+      - 6.91
+      - 0.86
+      - 0.16
+```
+
