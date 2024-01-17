@@ -234,6 +234,7 @@ $$
 | GeForce RTX 3090 | CUDA Version: 11.1 |
 |     PyTorch      |    1.10.1+cu111    |
 |      scipy       |       1.2.0        |
+|       onnx       |       1.11.0       |
 
 使用conda移植环境ssc
 
@@ -241,5 +242,9 @@ $$
 ImportError: No module named 'scipy.spatial.transform'
 
 pip3 install scipy==1.2.0
+pip3 install onnx==1.11.0
 ```
 
+在PRBonn开源项目中所有数据集路径均表示为-d /data_jiang/wy/dataset/SemanticKITTI/dataset
+
+推理：./infer.py -d /data_jiang/wy/dataset/SemanticKITTI/dataset/ -l log_pre/ -m log/

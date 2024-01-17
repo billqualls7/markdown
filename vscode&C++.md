@@ -1,5 +1,11 @@
 # VSCode使用笔记
 
+vncviewer中无法复制粘贴
+
+```bash
+vncconfig
+```
+
 安装插件CMake和CMake Tools
 
 Ctrl+Shift+p
