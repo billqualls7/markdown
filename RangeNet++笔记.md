@@ -32,7 +32,7 @@ $$
 
 e代表反射强度
 
-x y z r e生成一个张量（tensor）
+x y z r e生成一个张量（tensor） 
 
 $$
 [5*h*w]
