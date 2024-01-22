@@ -17,6 +17,8 @@ r是点的二范数，即
 $$
 r=\sqrt{x^2+y^2+z^2}
 $$
+
+
 $$
 \left(\begin{array}{l}
 u \\
