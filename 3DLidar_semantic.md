@@ -4,6 +4,36 @@
 
 ### 深度学习术语
 
+**Pooling：**
+
+降低特征图（Feature Map）的维度，在卷积神经网络中，池化操作通常紧跟在卷积操作之后，用于降低特征图的空间大小。
+
+池化操作的基本思想是将特征图划分为若干个子区域（一般为矩形），并对每个子区域进行统计汇总
+
+通过池化操作，可以： 1. 降低特征图的维度，减少网络中参数的数量，避免过拟合现象的发生， 2. 提高模型的计算速度和运行效率。
+
+**上采样：**
+
+将图像上采样到更高分辨率
+
+**Unpooling：**
+
+Pooling的逆运算，可称为反池化，但是池化是不可逆的，近似运算
+
+**转置卷积（Transposed convolution）:**
+
+用转置卷积进行上采样
+
+一对多的映射关系
+
+**skip connect：**
+
+残差连接 其中F包括卷积、激活等操作
+$$
+y=F(x)+x
+$$
+
+
 **backbone：**
 
 主干网络，提取特征的网络
@@ -15,6 +45,8 @@ head是获取网络输出内容的网络，利用之前提取的特征，head利
 **neck:**
 
 是放在backbone和head之间的，是为了更好的利用backbone提取的特征。
+
+
 
 ### 点云标注数据集 SemanticKITTI
 
@@ -33,7 +65,33 @@ head是获取网络输出内容的网络，利用之前提取的特征，head利
 
 
 
-## 2.Moving Object Segmentation in 3D LiDAR Data
+## 2. Segmentation in 3D LiDAR Data
+
+### 算法流程
+
+1. 点云转换为图像--球形投影
+
+   1.1 激光雷达硬件特质
+
+   Velodyne HDL 64-E激光雷达具有64个激光器,将投影图像的宽度设置为64
+
+   同样，对于HDL 64-E，最大水平分辨率为0.35度。因此，在最坏的情况下，每个激光至少可以得到（360 / 0.35 = 1028）点，使用1024
+
+   
+
+2. 二维语义分割
+
+   2.1 CNN网络
+
+   SqueezeNet移植用于特征提取
+
+   相关一系列网络基本只在水平方向进行下采样，高度远小于宽度
+
+   使用fireModules 和fireDeconvs替换了卷积和反卷积层
+
+3. 投影回去3D
+
+4. 后处理使用基于GPU的KNN消除不好的点和阴影
 
 ### Sequence Information
 
@@ -225,6 +283,22 @@ $$
 
 ## 3. Lidar-MOS复现
 
+### 标签
+
+标签可视化 [Segmatic KITTI数据集简单使用-CSDN博客](https://blog.csdn.net/yue__ye/article/details/108874928)
+
+标签内自带移动物体的标签
+
+### 网络
+
+RangeNet++ [PRBonn/lidar-bonnetal: Semantic and Instance Segmentation of LiDAR point clouds for autonomous driving (github.com)](https://github.com/PRBonn/lidar-bonnetal)
+
+将三维点云投影到二维图像上
+
+LMNet [PRBonn/LiDAR-MOS: (LMNet) Moving Object Segmentation in 3D LiDAR Data: A Learning-based Approach Exploiting Sequential Data (RAL/IROS 2021) (github.com)](https://github.com/PRBonn/LiDAR-MOS)
+
+利用激光雷达的序列信息生成残差图像分割动态物体与静态物体
+
 #### 环境问题
 
 系统配置
@@ -234,7 +308,7 @@ $$
 | GeForce RTX 3090 | CUDA Version: 11.1 |
 |     PyTorch      |    1.10.1+cu111    |
 |      scipy       |       1.2.0        |
-|       onnx       |       1.11.0       |
+|       onnx       |       1.8.0        |
 
 使用conda移植环境ssc
 
@@ -248,3 +322,12 @@ pip3 install onnx==1.11.0
 在PRBonn开源项目中所有数据集路径均表示为-d /data_jiang/wy/dataset/SemanticKITTI/dataset
 
 推理：./infer.py -d /data_jiang/wy/dataset/SemanticKITTI/dataset/ -l log_pre/ -m log/
+
+
+
+- [x] 复现语义模型
+- [ ] 复现静态动态分类模型
+- [ ] 涉及标签映射、重映射、逆映射
+
+
+

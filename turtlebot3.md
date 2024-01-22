@@ -45,3 +45,89 @@ roslaunch turtlebot3_navigation turtlebot3_navigation.launch map_file:=$HOME/map
 
 ```
 
+## uuv_sumulator
+
+uuv_simulator/uuv_sensor_plugins/uuv_sensor_ros_plugins/urdf/sonar_snippets.xacro
+
+```xml
+<xacro:macro name="forward_multibeam_p900" params="namespace parent_link *origin">
+    <xacro:multibeam_sonar
+      namespace="${namespace}"
+      suffix=""
+      parent_link="${parent_link}"
+      topic="sonar"
+      mass="0.02"
+      update_rate="15" # 多波束声纳的更新频率为 15 Hz，即每秒钟发布 15 次声纳数据
+      samples="512" # 多波束声纳的采样数为 512，在 FOV 内将会生成 512 条声纳射线。
+      fov="1.5708"  # 多波束声纳的视场角为 1.5708 弧度（约合 90 度）
+      range_min="1.0" # 最小测距为 1.0 米
+      range_max="100.0" # 最大测距为 100.0 米
+      range_stddev="0.027" # 多波束声纳测距的标准差为 0.027 米
+      mesh="">
+      <inertia ixx="0.00001" ixy="0.0" ixz="0.0" iyy="0.00001" iyz="0.0" izz="0.00001" />
+      <xacro:insert_block name="origin" />
+      <visual>
+        <geometry>
+          <mesh filename="file://$(find uuv_sensor_ros_plugins)/meshes/p900.dae" scale="1 1 1"/>
+        </geometry>
+      </visual>
+    </xacro:multibeam_sonar>
+  </xacro:macro>
+```
+
+```xml
+  <xacro:property name="mass" value="69.7"/>
+  <xacro:property name="length" value="1.98"/>
+  <xacro:property name="diameter" value="0.23"/>
+  <xacro:property name="radius" value="${diameter*0.5}"/>
+  <xacro:property name="volume" value="0.06799987704121499"/>
+  <xacro:property name="cob" value="0 0 0.06"/>
+  <xacro:property name="rho" value="1027.0"/>
+```
+
+bot
+
+```xml
+ <gazebo reference="base_scan">
+    <material>Gazebo/FlatBlack</material>
+    <sensor type="ray" name="lds_lfcd_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>$(arg laser_visual)</visualize>
+      <update_rate>15</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <resolution>1</resolution>
+
+            <samples>512</samples>
+            <min_angle>-0.7854</min_angle>
+            <max_angle>0.7854</max_angle>
+
+            <!-- <samples>360</samples>
+            <min_angle>0.00</min_angle>
+            <max_angle>6.28319</max_angle> -->
+
+
+          </horizontal>
+        </scan>
+        <range>
+          <min>1</min>
+          <max>100</max>
+          <!-- <max>1.5</max> -->
+          <resolution>0.015</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <!-- <stddev>0.01</stddev> -->
+          <stddev>0.027</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_lds_lfcd_controller" filename="libgazebo_ros_laser.so">
+        <topicName>scan</topicName>
+        <frameName>base_scan</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+```
+
