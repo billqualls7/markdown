@@ -39,6 +39,6 @@ evo_traj tum odom_final.txt --ref=tum_00_gt.txt -p -a -s
 计算误差
 
 ```bash
-evo_ape tum tum_00_gt.txt floam_00_odom.txt -r full -va --plot --plot_mode xyz
+evo_ape tum tum_00_gt.txt floam_00_odom.txt -r full -va --plot --plot_mode xz
 ```
 
